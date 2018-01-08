@@ -1,4 +1,5 @@
 var Nerd = require('./models/Nerd');
+var Todo = require('./models/Todo');
 
 module.exports = function(router) {
 
@@ -17,13 +18,10 @@ module.exports = function(router) {
         });
     });
 
-    // router.get('*', function(req, res) {
-    //     res.sendfile('./public/views/index.html');
-    // });
     
-    router.get('/', function(req, res) {
-        res.json({'message' : 'hooray! i did it again'});
-    });
+    // router.get('/', function(req, res) {
+    //     res.json({'message' : 'hooray! i did it again'});
+    // });
 
     router.route('/nerds')
 
@@ -92,4 +90,61 @@ module.exports = function(router) {
                 });
         });
 
+    
+
+        router.route('/todos')
+
+            .get(function(req, res) {
+                Todo.find(function(err, todos){
+                    if (err)
+                        res.send(err)
+
+                    console.log(todos);
+                    res.json(todos); 
+
+                });
+            })
+
+
+            .post(function(req, res){
+                Todo.create({
+                    text: req.body.text,
+                    done: false
+                }, function(err, todo){
+                    if (err)
+                        res.send(err)
+
+                    Todo.find(function(err, todos){
+                        if (err)
+
+                            res.send(err)
+
+                        res.json(todos);
+                    });
+                });
+            });          
+
+            
+        router.route('/todos/:todo_id')
+
+            .delete(function(req, res){
+                Todo.remove({
+                    _id : req.params.todo_id
+                }, function(err, todo){
+                    if (err)
+                        res.send(err);
+
+                    Todo.find(function(err, todos){
+
+                        if(err)
+                            res.send(err)
+                        res.json(todos);
+                    });
+                });
+            });
+            
+    router.get('*', function(req, res) {
+        res.sendfile('./public/index.html');
+    });
+        
 };

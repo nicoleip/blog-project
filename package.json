@@ -1,11 +1,14 @@
 {
 	"name": "blog-project",
+	"description": "Simple blog for personal use",
 	"main": "server.js",
+	"author": "Nikol Paraskova",
 	"dependencies": {
-	  "express" : "~4.5.1",
+	  "express" : "~4.7.2",
 	  "mongoose" : "~3.8.0",
 	  "body-parser" : "~1.4.2",
-	  "method-override" : "~2.0.2"        
-	}
+		"method-override" : "~2.0.2",
+		"morgan"	: "~1.2.2"        
+		}
   }
 
