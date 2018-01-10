@@ -1,6 +1,7 @@
 var Nerd = require('./models/Nerd');
 var Todo = require('./models/Todo');
 
+
 module.exports = function(router) {
 
     router.use(function(req, res, next) {
@@ -142,9 +143,38 @@ module.exports = function(router) {
                     });
                 });
             });
+
+
+    router.get('/', function(req, res) {
+        res.sendfile('./public/views/index.ejs');
+    });
+    
+    router.get('/login', function(req, res) {
+        res.render('./public/views/login.ejs', {message: req.flash('loginMessage')});
+    });
+
+    router.get('/signup', function(req, res){
+        res.render('./public/views/signup.ejs', {message: req.flash('signupMessage')});
+    });
+
+    router.get('/profile', isLoggedIn, function(req, res) {
+        res.render('./public/views/profile.ejs', {user : req.user});
+    });
+
+    router.get('/logout', function(req, res){
+        req.logout();
+        res.redirect('/');
+    });
             
     router.get('*', function(req, res) {
         res.sendfile('./public/index.html');
     });
         
 };
+
+function isLoggedIn(req, res, next) {
+    if(req.isAuthenticated())
+    return next();
+
+    res.redirect('/');
+}
